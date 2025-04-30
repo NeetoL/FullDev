@@ -1,0 +1,42 @@
+﻿USE [FullDev]
+GO
+
+/****** Object: SqlProcedure [dbo].[SPI_USUARIOS] Script Date: 29/04/2025 23:02:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE SPI_USUARIOS
+    @EMAIL VARCHAR(255),
+    @PASSWORD VARCHAR(255),
+    @TELEFONE VARCHAR(20),
+    @ENDERECO VARCHAR(255),
+    @NOME VARCHAR(100),
+    @SOBRENOME VARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO USUARIOS (EMAIL, PASSWORD, TELEFONE, ENDERECO, NOME, SOBRENOME)
+    VALUES (@EMAIL, @PASSWORD, @TELEFONE, @ENDERECO, @NOME, @SOBRENOME);
+
+    DECLARE @NewUserId INT = SCOPE_IDENTITY();
+
+    DECLARE @CdGrupoNormal INT;
+
+    SELECT TOP 1 @CdGrupoNormal = cd_grupo
+    FROM GRUPO
+    WHERE nm_grupo = 'NORMAL' AND cd_status = 1;
+
+    IF @CdGrupoNormal IS NOT NULL
+    BEGIN
+        INSERT INTO GRUPO_USUARIO (cd_usuario, cd_grupo, dh_timestamp)
+        VALUES (@NewUserId, @CdGrupoNormal, GETDATE());
+    END
+
+    SELECT @NewUserId AS NewUserId;
+END;
