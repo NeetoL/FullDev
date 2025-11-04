@@ -1,22 +1,18 @@
-﻿using Data.Login;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Services.Implementation.Login;
-using Services.Implementation.Postagem;
-using Services.Implementation.Usuarios;
+using Services.Implementation.Usuario;
 using Services.Interfaces.Login;
-using Services.Interfaces.Postagem;
-using Services.Interfaces.Usuarios;
+using Services.Interfaces.Usuario;
 
-namespace Services.Extensions;
-public static class ServiceCollectionExtension
+namespace Services.Extensions
 {
-    public static IServiceCollection AddServices(this IServiceCollection services) {
-        services.AddScoped<ILoginService, LoginService>();
-        services.AddScoped<IUsuariosService, UsuariosService>();
-        services.AddScoped<IPostagemService, PostagemService>();
-        services.AddScoped<IPostagemDAL, PostagemDAL>();
-        services.AddScoped<IUsuarioDAL, UsuariosDAL>();
-        services.AddScoped<ILoginDAL, LoginDAL>();
-        return services;
+    public static class ServiceCollectionExtension
+    {
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IAuthService, AuthService>();
+            return services;
+        }
     }
 }
